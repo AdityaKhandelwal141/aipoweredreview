@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#f8fafc">
+  <title>Shree Digital Marketing · Review Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ============================================================
+       GLOBAL RESET & ANIMATIONS
+    ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: #f8fafc;
+      background-image: 
+        linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+      min-height: 100vh;
+      color: #1e293b;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-content {
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    /* ============================================================
+       PROGRESS BAR
+    ============================================================ */
+    .progress-container {
+      width: 100%;
+      height: 5px;
+      background: #e2e8f0;
+      border-radius: 5px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5e9, #3b82f6);
+      width: 25%;
+      border-radius: 5px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ============================================================
+       CREDIT LINE (Made By)
+    ============================================================ */
+    .made-by {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed #e2e8f0;
+      letter-spacing: 0.3px;
+    }
+
+    .made-by a {
+      color: #0ea5e9;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .made-by a:hover {
+      color: #0284c7;
+      text-decoration: underline;
+    }
+
+    /* ============================================================
+       MOBILE VIEW
+    ============================================================ */
+    .mobile-view {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 12px;
+      padding-top: max(12px, env(safe-area-inset-top));
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .app-container {
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px #e2e8f0;
+      overflow: hidden;
+      padding: 22px 18px 20px;
+    }
+
+    .salon-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .logo-placeholder {
+      width: 58px;
+      height: 58px;
+      background: #f8fafc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2px #0ea5e9, 0 4px 12px rgba(14, 165, 233, 0.2);
+      overflow: hidden;
+      border: 2px solid #0ea5e9;
+    }
+
+    .logo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 4px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .logo-fallback {
+      font-size: 26px;
+      color: #0ea5e9;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .salon-info h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      line-height: 1.3;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .salon-info .location {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+    }
+
+    .location i { font-size: 0.7rem; color: #0ea5e9; }
+
+    .step-badge {
+      display: inline-block;
+      background: #f0f9ff;
+      color: #0284c7;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 40px;
+      letter-spacing: 0.4px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      border: 1px solid #bae6fd;
+    }
+
+    .step-badge i { color: #0ea5e9; }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .subhead {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .rating-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 7px;
+      margin: 14px 0 6px;
+    }
+
+    .rating-btn {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px 0;
+      flex: 1;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0ea5e9;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .rating-btn:active { transform: scale(0.95); }
+
+    .rating-btn.selected {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
+    }
+
+    .service-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 10px 0 6px;
+    }
+
+    .service-chip {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 11px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      flex: 1 0 auto;
+      text-align: center;
+      min-width: 95px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .service-chip:active { transform: scale(0.96); }
+
+    .service-chip.selected {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+    }
+
+    .like-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 6px;
+    }
+
+    .like-chip {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #334155;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .like-chip:active { transform: scale(0.96); }
+
+    .like-chip i { font-size: 0.75rem; color: #0ea5e9; }
+
+    .like-chip.selected {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: #ffffff;
+    }
+
+    .like-chip.selected i { color: #ffffff; }
+
+    .feedback-wrapper {
+      position: relative;
+    }
+
+    .feedback-input {
+      width: 100%;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 14px 14px 30px 14px;
+      font-size: 0.9rem;
+      background: #f8fafc;
+      resize: none;
+      min-height: 90px;
+      margin: 6px 0 10px;
+      outline: none;
+      color: #1e293b;
+      font-family: 'Inter', sans-serif;
+      -webkit-appearance: none;
+    }
+
+    .feedback-input:focus {
+      border-color: #0ea5e9;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    }
+
+    .feedback-input::placeholder { color: #94a3b8; }
+
+    .char-counter {
+      position: absolute;
+      bottom: 18px;
+      right: 16px;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    .suggestion-card {
+      background: #f0f9ff;
+      border-left: 5px solid #0ea5e9;
+      border-radius: 14px;
+      padding: 16px 14px;
+      margin: 16px 0 18px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #1e293b;
+      font-style: italic;
+      word-break: break-word;
+    }
+
+    .suggestion-card i { color: #0ea5e9; margin-right: 6px; }
+
+    .btn-primary {
+      background: #0ea5e9;
+      border: none;
+      border-radius: 60px;
+      padding: 17px 24px;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+      margin-top: 6px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+    }
+
+    .btn-primary i { font-size: 1rem; color: #ffffff; }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-primary:disabled {
+      background: #cbd5e1;
+      color: #64748b;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary:disabled i { color: #64748b; }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 60px;
+      padding: 14px 20px;
+      width: 100%;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-top: 8px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+    }
+
+    .btn-secondary:active { transform: scale(0.97); }
+    .btn-secondary i { color: #0ea5e9; }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .hidden { display: none !important; }
+    .mt-3 { margin-top: 14px; }
+    .text-center { text-align: center; }
+
+    .web-menu-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #0ea5e9;
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 10px;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 40px;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .web-menu-link i { font-size: 0.75rem; }
+    .web-menu-link:hover { background: #f0f9ff; }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.3);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+      white-space: nowrap;
+      max-width: 90%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast i { color: #4ade80; font-size: 1.1rem; }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ============================================================
+       DESKTOP VIEW
+    ============================================================ */
+    .desktop-view {
+      display: none;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .desktop-view::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .desktop-view::after {
+      content: '';
+      position: absolute;
+      bottom: -200px; left: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .desktop-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 60px 50px;
+      min-height: 100vh;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .desktop-left { padding: 40px 0; position: relative; }
+
+    .desktop-brand {
+      display: flex; align-items: center; gap: 20px; margin-bottom: 40px;
+    }
+
+    .desktop-logo {
+      width: 80px; height: 80px; background: #ffffff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px #0ea5e9, 0 0 30px rgba(14, 165, 233, 0.2);
+      overflow: hidden; border: 3px solid #0ea5e9;
+    }
+
+    .desktop-logo img {
+      width: 100%; height: 100%; object-fit: contain; padding: 6px;
+      background: #ffffff; border-radius: 50%;
+    }
+
+    .desktop-logo-fallback {
+      font-size: 38px; color: #0ea5e9; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%; font-family: 'Outfit', sans-serif;
+    }
+
+    .desktop-brand-text h1 {
+      font-family: 'Outfit', sans-serif; font-size: 2.2rem;
+      font-weight: 800; color: #0f172a; line-height: 1.1; letter-spacing: -0.5px;
+    }
+
+    .desktop-brand-text .tagline {
+      font-size: 0.8rem; color: #0ea5e9; letter-spacing: 2px;
+      text-transform: uppercase; margin-top: 6px; font-weight: 700;
+    }
+
+    .desktop-headline {
+      font-family: 'Outfit', sans-serif; font-size: 3.5rem;
+      font-weight: 800; line-height: 1.1; color: #0f172a;
+      margin-bottom: 20px; letter-spacing: -1.5px;
+    }
+
+    .desktop-headline .blue { color: #0ea5e9; }
+
+    .desktop-description {
+      font-size: 1.05rem; color: #475569; line-height: 1.6;
+      margin-bottom: 40px; max-width: 480px;
+    }
+
+    .desktop-features { display: flex; gap: 30px; margin-top: 30px; flex-wrap: wrap; }
+
+    .feature-item { display: flex; align-items: center; gap: 12px; }
+
+    .feature-icon {
+      width: 48px; height: 48px; background: #ffffff;
+      border: 1.5px solid #e2e8f0; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: #0ea5e9; font-size: 1.2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+
+    .feature-text h4 { font-size: 0.95rem; font-weight: 700; color: #0f172a; }
+    .feature-text p { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+
+    .desktop-right { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
+
+    .desktop-card {
+      width: 100%; max-width: 520px; background: #ffffff;
+      border-radius: 32px; padding: 44px 40px 30px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(14, 165, 233, 0.05);
+      position: relative;
+    }
+
+    .desktop-card::before {
+      content: ''; position: absolute; top: 0; left: 40px; right: 40px;
+      height: 3px; background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+      border-radius: 2px;
+    }
+
+    .desktop-card .progress-container { margin-bottom: 28px; }
+
+    .desktop-card h2 {
+      font-family: 'Outfit', sans-serif; font-size: 2rem;
+      font-weight: 800; margin-bottom: 8px; color: #0f172a; letter-spacing: -0.5px;
+    }
+
+    .desktop-card .subhead { font-size: 0.95rem; color: #64748b; margin-bottom: 26px; }
+
+    .desktop-card .step-badge { font-size: 0.72rem; padding: 7px 18px; margin-bottom: 20px; }
+
+    .desktop-card .rating-row { gap: 12px; margin: 20px 0 10px; }
+
+    .desktop-card .rating-btn { padding: 20px 0; font-size: 1.6rem; border-radius: 18px; border-width: 2px; }
+
+    .desktop-card .rating-btn:hover {
+      border-color: #0ea5e9; background: #f8fafc; transform: translateY(-2px);
+    }
+
+    .desktop-card .service-grid { gap: 12px; margin: 18px 0 10px; }
+
+    .desktop-card .service-chip { padding: 14px 22px; font-size: 0.92rem; min-width: 110px; }
+
+    .desktop-card .service-chip:hover {
+      border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; transform: translateY(-1px);
+    }
+
+    .desktop-card .like-grid { gap: 10px; margin: 18px 0 10px; }
+
+    .desktop-card .like-chip { padding: 12px 18px; font-size: 0.85rem; }
+
+    .desktop-card .like-chip:hover {
+      border-color: #0ea5e9; color: #0ea5e9; background: #f8fafc; transform: translateY(-1px);
+    }
+
+    .desktop-card .feedback-input { min-height: 100px; padding: 16px 16px 32px 16px; font-size: 0.95rem; margin: 12px 0 16px; }
+    .desktop-card .char-counter { bottom: 30px; right: 20px; }
+
+    .desktop-card .btn-primary { padding: 18px 28px; font-size: 1.05rem; margin-top: 10px; }
+
+    .desktop-card .btn-primary:hover:not(:disabled) {
+      background: #0284c7; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(14, 165, 233, 0.4);
+    }
+
+    .desktop-card .btn-secondary { padding: 15px 24px; font-size: 0.92rem; margin-top: 10px; }
+
+    .desktop-card .btn-secondary:hover {
+      border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff;
+    }
+
+    .desktop-card .suggestion-card { padding: 22px 20px; font-size: 0.98rem; line-height: 1.65; margin: 22px 0 24px; }
+
+    .desktop-card .web-menu-link { font-size: 0.85rem; padding: 12px 20px; margin-top: 14px; }
+
+    /* Desktop Specific Made-by */
+    .desktop-made-by {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 16px;
+      letter-spacing: 0.3px;
+    }
+    .desktop-made-by a {
+      color: #0ea5e9;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .desktop-made-by a:hover { color: #0284c7; text-decoration: underline; }
+
+    /* ============================================================
+       RESPONSIVE BREAKPOINTS
+    ============================================================ */
+    @media (max-width: 380px) {
+      .app-container { padding: 16px 12px 16px; border-radius: 22px; }
+      .rating-btn { font-size: 1.05rem; padding: 12px 0; }
+      h2 { font-size: 1.15rem; }
+      .logo-placeholder { width: 50px; height: 50px; }
+      .salon-info h1 { font-size: 1rem; }
+      .service-chip { font-size: 0.8rem; padding: 10px 12px; min-width: 85px; }
+    }
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .app-container { max-width: 520px; padding: 30px 26px 24px; }
+      h2 { font-size: 1.5rem; }
+      .rating-btn { padding: 18px 0; font-size: 1.4rem; }
+      .service-chip { padding: 13px 20px; font-size: 0.92rem; }
+      .like-chip { padding: 12px 18px; font-size: 0.88rem; }
+      .btn-primary { padding: 19px 28px; font-size: 1.08rem; }
+      .btn-secondary { padding: 16px 24px; font-size: 0.95rem; }
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-view { display: none; }
+      .desktop-view { display: block; }
+    }
+
+    @media (min-width: 1440px) {
+      .desktop-wrapper { grid-template-columns: 1fr 1.15fr; gap: 80px; padding: 80px 60px; max-width: 1500px; }
+      .desktop-headline { font-size: 4.2rem; }
+      .desktop-brand-text h1 { font-size: 2.8rem; }
+      .desktop-logo { width: 95px; height: 95px; }
+      .desktop-logo-fallback { font-size: 45px; }
+      .desktop-card { padding: 52px 48px 34px; max-width: 580px; }
+    }
+
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      .desktop-wrapper { gap: 40px; padding: 50px 40px; }
+      .desktop-headline { font-size: 2.8rem; }
+      .desktop-brand-text h1 { font-size: 2rem; }
+      .desktop-logo { width: 78px; height: 78px; }
+      .desktop-logo-fallback { font-size: 36px; }
+      .desktop-card { padding: 36px 32px 24px; max-width: 460px; }
+      .desktop-card h2 { font-size: 1.7rem; }
+      .desktop-card .rating-btn { padding: 16px 0; font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       MOBILE VIEW
+  ============================================================ -->
+  <div class="mobile-view">
+    <div class="app-container" id="mobileApp">
+      
+      <div class="salon-header">
+        <div class="logo-placeholder">
+          <!-- Replace src with your actual logo URL -->
+          <img src="logo.jpeg" alt="Shree Digital Marketing"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="logo-fallback" style="display:none;">S</div>
+        </div>
+        <div class="salon-info">
+          <h1>Shree Digital Marketing</h1>
+          <div class="location"><i class="fas fa-map-marker-alt"></i> Latur & Pune</div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-bar" id="mProgressBar" style="width: 25%;"></div>
+      </div>
+
+      <!-- STEP 1: RATING -->
+      <div id="mStepRating" class="step-content">
+        <div class="step-badge"><i class="fas fa-star" style="margin-right: 5px;"></i> Step 1 of 4</div>
+        <h2>How was your experience?</h2>
+        <p class="subhead">Tap a rating — your feedback helps us grow.</p>
+        <div class="rating-row" id="mRatingRow">
+          <div class="rating-btn" data-rating="1">1</div>
+          <div class="rating-btn" data-rating="2">2</div>
+          <div class="rating-btn" data-rating="3">3</div>
+          <div class="rating-btn" data-rating="4">4</div>
+          <div class="rating-btn" data-rating="5">5</div>
+        </div>
+        <button class="btn-primary mt-3" id="mRatingNextBtn" disabled>
+          Continue <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- STEP 2: SERVICE -->
+      <div id="mStepService" class="hidden step-content">
+        <div class="step-badge"><i class="fas fa-briefcase" style="margin-right: 5px;"></i> Step 2 of 4</div>
+        <h2>Which service did you use?</h2>
+        <p class="subhead">Select the service you received from us.</p>
+        <div class="service-grid" id="mServiceGrid">
+          <div class="service-chip" data-service="Digital Marketing">📊 Digital Mktg</div>
+          <div class="service-chip" data-service="Social Media Marketing">📱 Social Media</div>
+          <div class="service-chip" data-service="Performance Marketing">🎯 Ads</div>
+          <div class="service-chip" data-service="Website Development">💻 Web Dev</div>
+          <div class="service-chip" data-service="Branding & Creative">🚀 Branding</div>
+          <div class="service-chip" data-service="Content & Reels">🎬 Reels</div>
+          <div class="service-chip" data-service="Lead Generation">🎯 Leads</div>
+          <div class="service-chip" data-service="AI Marketing">🤖 AI Mktg</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn-primary" id="mServiceNextBtn" disabled>Continue <i class="fas fa-arrow-right"></i></button>
+          <button class="btn-secondary" id="mBackToRatingBtn"><i class="fas fa-chevron-left"></i> Back</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: LIKES -->
+      <div id="mStepLikes" class="hidden step-content">
+        <div class="step-badge"><i class="fas fa-heart" style="margin-right: 5px;"></i> Step 3 of 4</div>
+        <h2>What did you like?</h2>
+        <p class="subhead">Pick all that made your experience great.</p>
+        <div class="like-grid" id="mLikeGrid">
+          <div class="like-chip" data-like="Strategy First"><i class="fas fa-chess"></i> Strategy</div>
+          <div class="like-chip" data-like="Creative Thinking"><i class="fas fa-paint-brush"></i> Creative</div>
+          <div class="like-chip" data-like="Performance Mindset"><i class="fas fa-chart-line"></i> Performance</div>
+          <div class="like-chip" data-like="Modern Technology"><i class="fas fa-microchip"></i> Technology</div>
+          <div class="like-chip" data-like="Personal Attention"><i class="fas fa-user-check"></i> Attention</div>
+        </div>
+        <div class="feedback-wrapper mt-3">
+          <textarea class="feedback-input" id="mOptionalFeedback" placeholder="Any additional feedback? (optional)" rows="3"></textarea>
+          <div class="char-counter"><span id="mCharCount">0</span>/150</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn-primary" id="mLikesNextBtn">Continue <i class="fas fa-arrow-right"></i></button>
+          <button class="btn-secondary" id="mBackToServiceBtn"><i class="fas fa-chevron-left"></i> Back</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: SUGGESTION -->
+      <div id="mStepSuggestion" class="hidden step-content">
+        <div class="step-badge"><i class="fas fa-pen-fancy" style="margin-right: 5px;"></i> Step 4 of 4</div>
+        <h2>Your review suggestion</h2>
+        <p class="subhead">Copy this to Google — it only takes a second.</p>
+
+        <div class="suggestion-card">
+          <i class="fas fa-quote-left"></i> <span id="mSuggestionContent">Loading...</span>
+        </div>
+
+        <button class="btn-primary" id="mCopyAndGoogleBtn">
+          <i class="fas fa-copy"></i> Copy & Review on Google
+        </button>
+        <button class="btn-secondary" id="mBackToLikesBtn"><i class="fas fa-chevron-left"></i> Back</button>
+
+        <div class="text-center">
+          <a href="https://shree-digital-marketing.42web.io/?i=1" class="web-menu-link" target="_blank" rel="noopener">
+            <i class="fas fa-globe"></i> Visit Our Website
+          </a>
+        </div>
+      </div>
+
+      <!-- MADE BY CREDIT -->
+      <div class="made-by">
+        Made with <i class="fas fa-heart" style="color: #ef4444; font-size: 0.65rem; margin: 0 2px;"></i> by 
+        <a href="https://shree-digital-marketing.42web.io/?i=1" target="_blank">SHREE Digital Marketing</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       DESKTOP VIEW
+  ============================================================ -->
+  <div class="desktop-view">
+    <div class="desktop-wrapper">
+      <div class="desktop-left">
+        <div class="desktop-brand">
+          <div class="desktop-logo">
+            <img src="logo.jpeg" alt="Shree Digital Marketing"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="desktop-logo-fallback" style="display:none;">S</div>
+          </div>
+          <div class="desktop-brand-text">
+            <h1>SHREE Digital</h1>
+            <div class="tagline">Marketing Agency</div>
+          </div>
+        </div>
+
+        <h2 class="desktop-headline">
+          We Build <span class="blue">Brands</span><br>
+          That Grow.
+        </h2>
+
+        <p class="desktop-description">
+          SHREE helps businesses build a stronger digital presence, reach the right audience 
+          and turn attention into real business opportunities. Your feedback helps us 
+          refine our strategies and deliver even better results.
+        </p>
+
+        <div class="desktop-features">
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-star"></i></div>
+            <div class="feature-text"><h4>4 Easy Steps</h4><p>Quick & simple</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-clock"></i></div>
+            <div class="feature-text"><h4>Under 1 Minute</h4><p>No signup needed</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><i class="fab fa-google"></i></div>
+            <div class="feature-text"><h4>Google Review</h4><p>Auto-copy & paste</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="desktop-right">
+        <div class="desktop-card">
+          
+          <div class="progress-container">
+            <div class="progress-bar" id="dProgressBar" style="width: 25%;"></div>
+          </div>
+
+          <!-- STEP 1 -->
+          <div id="dStepRating" class="step-content">
+            <div class="step-badge"><i class="fas fa-star" style="margin-right: 6px;"></i> Step 1 of 4</div>
+            <h2>How was your experience?</h2>
+            <p class="subhead">Tap a rating — your feedback helps us grow.</p>
+            <div class="rating-row" id="dRatingRow">
+              <div class="rating-btn" data-rating="1">1</div>
+              <div class="rating-btn" data-rating="2">2</div>
+              <div class="rating-btn" data-rating="3">3</div>
+              <div class="rating-btn" data-rating="4">4</div>
+              <div class="rating-btn" data-rating="5">5</div>
+            </div>
+            <button class="btn-primary mt-3" id="dRatingNextBtn" disabled>
+              Continue <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- STEP 2 -->
+          <div id="dStepService" class="hidden step-content">
+            <div class="step-badge"><i class="fas fa-briefcase" style="margin-right: 6px;"></i> Step 2 of 4</div>
+            <h2>Which service did you use?</h2>
+            <p class="subhead">Select the service you received from us.</p>
+            <div class="service-grid" id="dServiceGrid">
+              <div class="service-chip" data-service="Digital Marketing">📊 Digital Mktg</div>
+              <div class="service-chip" data-service="Social Media Marketing">📱 Social Media</div>
+              <div class="service-chip" data-service="Performance Marketing">🎯 Ads</div>
+              <div class="service-chip" data-service="Website Development">💻 Web Dev</div>
+              <div class="service-chip" data-service="Branding & Creative">🚀 Branding</div>
+              <div class="service-chip" data-service="Content & Reels">🎬 Reels</div>
+              <div class="service-chip" data-service="Lead Generation">🎯 Leads</div>
+              <div class="service-chip" data-service="AI Marketing">🤖 AI Mktg</div>
+            </div>
+            <div class="btn-group">
+              <button class="btn-primary" id="dServiceNextBtn" disabled>Continue <i class="fas fa-arrow-right"></i></button>
+              <button class="btn-secondary" id="dBackToRatingBtn"><i class="fas fa-chevron-left"></i> Back</button>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div id="dStepLikes" class="hidden step-content">
+            <div class="step-badge"><i class="fas fa-heart" style="margin-right: 6px;"></i> Step 3 of 4</div>
+            <h2>What did you like?</h2>
+            <p class="subhead">Pick all that made your experience great.</p>
+            <div class="like-grid" id="dLikeGrid">
+              <div class="like-chip" data-like="Strategy First"><i class="fas fa-chess"></i> Strategy</div>
+              <div class="like-chip" data-like="Creative Thinking"><i class="fas fa-paint-brush"></i> Creative</div>
+              <div class="like-chip" data-like="Performance Mindset"><i class="fas fa-chart-line"></i> Performance</div>
+              <div class="like-chip" data-like="Modern Technology"><i class="fas fa-microchip"></i> Technology</div>
+              <div class="like-chip" data-like="Personal Attention"><i class="fas fa-user-check"></i> Attention</div>
+            </div>
+            <div class="feedback-wrapper mt-3">
+              <textarea class="feedback-input" id="dOptionalFeedback" placeholder="Any additional feedback? (optional)" rows="3"></textarea>
+              <div class="char-counter"><span id="dCharCount">0</span>/150</div>
+            </div>
+            <div class="btn-group">
+              <button class="btn-primary" id="dLikesNextBtn">Continue <i class="fas fa-arrow-right"></i></button>
+              <button class="btn-secondary" id="dBackToServiceBtn"><i class="fas fa-chevron-left"></i> Back</button>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div id="dStepSuggestion" class="hidden step-content">
+            <div class="step-badge"><i class="fas fa-pen-fancy" style="margin-right: 6px;"></i> Step 4 of 4</div>
+            <h2>Your review suggestion</h2>
+            <p class="subhead">Copy this to Google — it only takes a second.</p>
+
+            <div class="suggestion-card">
+              <i class="fas fa-quote-left"></i> <span id="dSuggestionContent">Loading...</span>
+            </div>
+
+            <button class="btn-primary" id="dCopyAndGoogleBtn">
+              <i class="fas fa-copy"></i> Copy & Review on Google
+            </button>
+            <button class="btn-secondary" id="dBackToLikesBtn"><i class="fas fa-chevron-left"></i> Back</button>
+
+            <div class="text-center">
+              <a href="https://shree-digital-marketing.42web.io/?i=1" class="web-menu-link" target="_blank" rel="noopener">
+                <i class="fas fa-globe"></i> Visit Our Website
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- DESKTOP MADE BY CREDIT -->
+        <div class="desktop-made-by">
+          Made with <i class="fas fa-heart" style="color: #ef4444; font-size: 0.65rem; margin: 0 2px;"></i> by 
+          <a href="https://shree-digital-marketing.42web.io/?i=1" target="_blank">SHREE Digital Marketing</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Review copied!</span></div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // --- SET YOUR LINKS HERE ---
+      var GOOGLE_REVIEW_URL = 'https://g.page/r/CRVJs76mwGFmEBM/review';
+      
+      var toast = document.getElementById('toast');
+      var toastMsg = document.getElementById('toastMsg');
+
+      function showToast(message) {
+        if (!toast) return;
+        toastMsg.textContent = message;
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 3000);
+      }
+
+      // --- CONFETTI TRIGGER ---
+      function triggerConfetti() {
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#0ea5e9', '#3b82f6', '#ffffff', '#fbbf24']
+          });
+        }
+      }
+
+      function fallbackCopy(text) {
+        var textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '0';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          showToast('✅ Review copied! Opening Google...');
+          triggerConfetti();
+        } catch (err) {
+          showToast('📋 Please copy manually');
+        }
+        document.body.removeChild(textArea);
+        setTimeout(function() { 
+          window.location.href = GOOGLE_REVIEW_URL; 
+        }, 600);
+      }
+
+      function copyAndGo(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(function() {
+            showToast('✅ Review copied! Opening Google...');
+            triggerConfetti();
+            setTimeout(function() { 
+              window.location.href = GOOGLE_REVIEW_URL; 
+            }, 600);
+          }).catch(function() { fallbackCopy(text); });
+        } else {
+          fallbackCopy(text);
+        }
+      }
+
+      // --- MOBILE CONTROLLER ---
+      function initMobile() {
+        var state = { rating: null, service: null, likes: [], feedback: '' };
+        var progressBar = document.getElementById('mProgressBar');
+
+        var stepRating = document.getElementById('mStepRating');
+        var stepService = document.getElementById('mStepService');
+        var stepLikes = document.getElementById('mStepLikes');
+        var stepSuggestion = document.getElementById('mStepSuggestion');
+
+        var ratingBtns = document.querySelectorAll('#mRatingRow .rating-btn');
+        var ratingNextBtn = document.getElementById('mRatingNextBtn');
+
+        var serviceChips = document.querySelectorAll('#mServiceGrid .service-chip');
+        var serviceNextBtn = document.getElementById('mServiceNextBtn');
+        var backToRatingBtn = document.getElementById('mBackToRatingBtn');
+
+        var likeChips = document.querySelectorAll('#mLikeGrid .like-chip');
+        var likesNextBtn = document.getElementById('mLikesNextBtn');
+        var backToServiceBtn = document.getElementById('mBackToServiceBtn');
+        var optionalFeedback = document.getElementById('mOptionalFeedback');
+        var charCount = document.getElementById('mCharCount');
+
+        var suggestionContent = document.getElementById('mSuggestionContent');
+        var copyAndGoogleBtn = document.getElementById('mCopyAndGoogleBtn');
+        var backToLikesBtn = document.getElementById('mBackToLikesBtn');
+
+        function setProgress(width) { progressBar.style.width = width; }
+        function showStep(el, progress) {
+          [stepRating, stepService, stepLikes, stepSuggestion].forEach(function(s) { if (s) s.classList.add('hidden'); });
+          if (el) {
+            el.classList.remove('hidden');
+            el.classList.remove('step-content');
+            void el.offsetWidth;
+            el.classList.add('step-content');
+          }
+          if (progress) setProgress(progress);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateRatingUI() {
+          for (var i = 0; i < ratingBtns.length; i++) {
+            var b = ratingBtns[i];
+            if (parseInt(b.getAttribute('data-rating'), 10) === state.rating) b.classList.add('selected');
+            else b.classList.remove('selected');
+          }
+          ratingNextBtn.disabled = !state.rating;
+        }
+
+        function updateServiceUI() {
+          for (var i = 0; i < serviceChips.length; i++) {
+            var c = serviceChips[i];
+            if (c.getAttribute('data-service') === state.service) c.classList.add('selected');
+            else c.classList.remove('selected');
+          }
+          serviceNextBtn.disabled = !state.service;
+        }
+
+        function updateLikesUI() {
+          for (var i = 0; i < likeChips.length; i++) {
+            var c = likeChips[i];
+            if (state.likes.indexOf(c.getAttribute('data-like')) !== -1) c.classList.add('selected');
+            else c.classList.remove('selected');
+          }
+        }
+
+        for (var i = 0; i < ratingBtns.length; i++) {
+          (function(btn) {
+            btn.addEventListener('click', function(e) {
+              e.preventDefault();
+              state.rating = parseInt(btn.getAttribute('data-rating'), 10);
+              updateRatingUI();
+              if (state.rating === 5) triggerConfetti();
+            });
+          })(ratingBtns[i]);
+        }
+
+        ratingNextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (!state.rating) return;
+          showStep(stepService, '50%'); 
+          updateServiceUI();
+        });
+
+        for (var j = 0; j < serviceChips.length; j++) {
+          (function(chip) {
+            chip.addEventListener('click', function(e) {
+              e.preventDefault();
+              state.service = chip.getAttribute('data-service');
+              updateServiceUI();
+            });
+          })(serviceChips[j]);
+        }
+
+        serviceNextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (!state.service) return;
+          showStep(stepLikes, '75%');
+          if (optionalFeedback) optionalFeedback.value = state.feedback || '';
+          updateLikesUI();
+        });
+
+        backToRatingBtn.addEventListener('click', function(e) {
+          e.preventDefault(); showStep(stepRating, '25%'); updateRatingUI();
+        });
+
+        for (var k = 0; k < likeChips.length; k++) {
+          (function(chip) {
+            chip.addEventListener('click', function(e) {
+              e.preventDefault();
+              var v = chip.getAttribute('data-like');
+              var idx = state.likes.indexOf(v);
+              if (idx === -1) state.likes.push(v); else state.likes.splice(idx, 1);
+              updateLikesUI();
+            });
+          })(likeChips[k]);
+        }
+
+        if (optionalFeedback) {
+          optionalFeedback.addEventListener('input', function(e) { 
+            if (e.target.value.length > 150) {
+              e.target.value = e.target.value.substring(0, 150);
+            }
+            state.feedback = e.target.value; 
+            charCount.textContent = e.target.value.length;
+          });
+        }
+
+        likesNextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          suggestionContent.textContent = generateSuggestion(state);
+          showStep(stepSuggestion, '100%');
+        });
+
+        backToServiceBtn.addEventListener('click', function(e) {
+          e.preventDefault(); showStep(stepService, '50%'); updateServiceUI();
+          if (optionalFeedback) state.feedback = optionalFeedback.value;
+        });
+
+        backToLikesBtn.addEventListener('click', function(e) {
+          e.preventDefault(); showStep(stepLikes, '75%'); updateLikesUI();
+          if (optionalFeedback) optionalFeedback.value = state.feedback || '';
+        });
+
+        copyAndGoogleBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          copyAndGo(generateSuggestion(state));
+        });
+
+        ratingNextBtn.disabled = true;
+        serviceNextBtn.disabled = true;
+        updateRatingUI(); updateServiceUI(); updateLikesUI();
+      }
+
+      // --- DESKTOP CONTROLLER ---
+      function initDesktop() {
+        var state = { rating: null, service: null, likes: [], feedback: '' };
+        var progressBar = document.getElementById('dProgressBar');
+
+        var stepRating = document.getElementById('dStepRating');
+        var stepService = document.getElementById('dStepService');
+        var stepLikes = document.getElementById('dStepLikes');
+        var stepSuggestion = document.getElementById('dStepSuggestion');
+
+        var ratingBtns = document.querySelectorAll('#dRatingRow .rating-btn');
+        var ratingNextBtn = document.getElementById('dRatingNextBtn');
+
+        var serviceChips = document.querySelectorAll('#dServiceGrid .service-chip');
+        var serviceNextBtn = document.getElementById('dServiceNextBtn');
+        var backToRatingBtn = document.getElementById('dBackToRatingBtn');
+
+        var likeChips = document.querySelectorAll('#dLikeGrid .like-chip');
+        var likesNextBtn = document.getElementById('dLikesNextBtn');
+        var backToServiceBtn = document.getElementById('dBackToServiceBtn');
+        var optionalFeedback = document.getElementById('dOptionalFeedback');
+        var charCount = document.getElementById('dCharCount');
+
+        var suggestionContent = document.getElementById('dSuggestionContent');
+        var copyAndGoogleBtn = document.getElementById('dCopyAndGoogleBtn');
+        var backToLikesBtn = document.getElementById('dBackToLikesBtn');
+
+        function setProgress(width) { progressBar.style.width = width; }
+        function showStep(el, progress) {
+          [stepRating, stepService, stepLikes, stepSuggestion].forEach(function(s) { if (s) s.classList.add('hidden'); });
+          if (el) {
+            el.classList.remove('hidden');
+            el.classList.remove('step-content');
+            void el.offsetWidth;
+            el.classList.add('step-content');
+          }
+          if (progress) setProgress(progress);
+        }
+
+        function updateRatingUI() {
+          for (var i = 0; i < ratingBtns.length; i++) {
+            var b = ratingBtns[i];
+            if (parseInt(b.getAttribute('data-rating'), 10) === state.rating) b.classList.add('selected');
+            else b.classList.remove('selected');
+          }
+          ratingNextBtn.disabled = !state.rating;
+        }
+
+        function updateServiceUI() {
+          for (var i = 0; i < serviceChips.length; i++) {
+            var c = serviceChips[i];
+            if (c.getAttribute('data-service') === state.service) c.classList.add('selected');
+            else c.classList.remove('selected');
+          }
+          serviceNextBtn.disabled = !state.service;
+        }
+
+        function updateLikesUI() {
+          for (var i = 0; i < likeChips.length; i++) {
+            var c = likeChips[i];
+            if (state.likes.indexOf(c.getAttribute('data-like')) !== -1) c.classList.add('selected');
+            else c.classList.remove('selected');
+          }
+        }
+
+        for (var i = 0; i < ratingBtns.length; i++) {
+          (function(btn) {
+            btn.addEventListener('click', function() {
+              state.rating = parseInt(btn.getAttribute('data-rating'), 10);
+              updateRatingUI();
+              if (state.rating === 5) triggerConfetti();
+            });
+          })(ratingBtns[i]);
+        }
+
+        ratingNextBtn.addEventListener('click', function() {
+          if (!state.rating) return;
+          showStep(stepService, '50%'); updateServiceUI();
+        });
+
+        for (var j = 0; j < serviceChips.length; j++) {
+          (function(chip) {
+            chip.addEventListener('click', function() {
+              state.service = chip.getAttribute('data-service');
+              updateServiceUI();
+            });
+          })(serviceChips[j]);
+        }
+
+        serviceNextBtn.addEventListener('click', function() {
+          if (!state.service) return;
+          showStep(stepLikes, '75%');
+          if (optionalFeedback) optionalFeedback.value = state.feedback || '';
+          updateLikesUI();
+        });
+
+        backToRatingBtn.addEventListener('click', function() {
+          showStep(stepRating, '25%'); updateRatingUI();
+        });
+
+        for (var k = 0; k < likeChips.length; k++) {
+          (function(chip) {
+            chip.addEventListener('click', function() {
+              var v = chip.getAttribute('data-like');
+              var idx = state.likes.indexOf(v);
+              if (idx === -1) state.likes.push(v); else state.likes.splice(idx, 1);
+              updateLikesUI();
+            });
+          })(likeChips[k]);
+        }
+
+        if (optionalFeedback) {
+          optionalFeedback.addEventListener('input', function(e) { 
+            if (e.target.value.length > 150) {
+              e.target.value = e.target.value.substring(0, 150);
+            }
+            state.feedback = e.target.value; 
+            charCount.textContent = e.target.value.length;
+          });
+        }
+
+        likesNextBtn.addEventListener('click', function() {
+          suggestionContent.textContent = generateSuggestion(state);
+          showStep(stepSuggestion, '100%');
+        });
+
+        backToServiceBtn.addEventListener('click', function() {
+          showStep(stepService, '50%'); updateServiceUI();
+          if (optionalFeedback) state.feedback = optionalFeedback.value;
+        });
+
+        backToLikesBtn.addEventListener('click', function() {
+          showStep(stepLikes, '75%'); updateLikesUI();
+          if (optionalFeedback) optionalFeedback.value = state.feedback || '';
+        });
+
+        copyAndGoogleBtn.addEventListener('click', function() {
+          copyAndGo(generateSuggestion(state));
+        });
+
+        ratingNextBtn.disabled = true;
+        serviceNextBtn.disabled = true;
+        updateRatingUI(); updateServiceUI(); updateLikesUI();
+      }
+
+      // --- SUGGESTION GENERATOR ---
+      function generateSuggestion(s) {
+        var rating = s.rating || 5;
+        var service = s.service || 'digital marketing';
+        var likes = s.likes.length ? s.likes : [];
+        var feedback = (s.feedback || '').trim();
+        var text = '';
+
+        if (rating >= 4) text = 'Excellent experience with SHREE Digital Marketing! ';
+        else if (rating === 3) text = 'Had a good experience with SHREE Digital Marketing. ';
+        else text = 'Recently worked with SHREE Digital Marketing. ';
+
+        text += 'We used their ' + service.toLowerCase() + ' services. ';
+
+        if (likes.length > 0) {
+          var likeText = likes.join(', ').replace(/,([^,]*)$/, ' and$1');
+          text += 'What stood out: ' + likeText + '. ';
+        }
+
+        if (feedback) text += 'Also, "' + feedback + '" ';
+
+        if (rating >= 4) text += 'They truly build brands that grow. Highly recommend for businesses in Latur and Pune! 🌟';
+        else if (rating === 3) text += 'Overall a decent experience, would work with them again.';
+        else text += 'I hope to see improvements next time.';
+
+        return text.replace(/\s+/g, ' ').trim();
+      }
+
+      // Initialize both
+      initMobile();
+      initDesktop();
+    })();
+  </script>
+</body>
+</html>
